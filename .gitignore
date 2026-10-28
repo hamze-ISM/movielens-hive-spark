@@ -1,0 +1,40 @@
+# Données brutes et échantillons : trop lourds pour GitHub
+data/
+*.csv
+# ... sauf nos petits résultats
+!results/*.csv
+
+# Fichiers créés par Hive / Spark en local
+metastore_db/
+derby.log
+spark-warehouse/
+logs/
+
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+
+# Éditeur et Windows
+.vscode/
+*:Zone.Identifier
+EOFcd ~/movielens-hive-spark
+cat > .gitignore <<'EOF'
+# Données brutes et échantillons : trop lourds pour GitHub
+data/
+*.csv
+# ... sauf nos petits résultats
+!results/*.csv
+
+# Fichiers créés par Hive / Spark en local
+metastore_db/
+derby.log
+spark-warehouse/
+logs/
+
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+
+# Éditeur et Windows
+.vscode/
+*:Zone.Identifier
