@@ -98,3 +98,19 @@
 - Top 10 de référence (pandas) : `results/top10_reference_pandas.csv` -> 1. Shawshank Redemption (4,4097),
   2. Godfather (4,3163), 3. Parasite (4,2712), 4. Usual Suspects, 5. Godfather Part II, 6. 12 Angry Men,
   7. Schindler's List, 8. Fight Club, 9. Planet Earth (2006), 10. Seven Samurai (4,2117).
+  
+## Partie 5 : Top 10 avec Hive
+
+- Script `hive/05_top10_hive.hql` (variables `db` et `seuil`) :
+  1. table temporaire `stats_films` : nombre, moyenne et somme des notes par film (une seule lecture des 33,8 M de notes) ;
+  2. C = somme des notes / nombre de notes = 3,54254040873888 ;
+  3. score pondéré IMDb pour les films avec au moins 1 000 notes, rang avec `ROW_NUMBER()`
+     (score décroissant, puis nombre de notes décroissant) ;
+  4. résultat enregistré dans la table `top10_hive` et dans HDFS : `/user/ubuntu/movielens/output/hive/movielens/`.
+- Test sur l'échantillon avec seuil = 10 (1 % des données) : le code tourne, 2 min 20.
+- Résultat sur le jeu complet : **identique à la référence pandas** (mêmes films, même ordre, mêmes scores à 4 décimales).
+  Copie : `results/top10_hive.tsv`.
+- Chronométrage (`scripts/05_chrono_hive.sh`, 3 exécutions) : 174,6 s, 213,2 s, 175,4 s -> **médiane 175,4 s**.
+  Durées : `results/temps_hive.csv`.
+- Constat : presque le même temps sur 1 % des données (2 min 20) que sur 100 % (2 min 41) -> le coût vient surtout
+  des jobs MapReduce successifs (démarrage de chaque job + écriture sur disque entre les étapes), pas du volume.
