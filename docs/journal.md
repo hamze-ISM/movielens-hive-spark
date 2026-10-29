@@ -114,3 +114,21 @@
   Durées : `results/temps_hive.csv`.
 - Constat : presque le même temps sur 1 % des données (2 min 20) que sur 100 % (2 min 41) -> le coût vient surtout
   des jobs MapReduce successifs (démarrage de chaque job + écriture sur disque entre les étapes), pas du volume.
+  
+## Partie 6 : Top 10 avec Spark (PySpark)
+
+- Script `spark/top10_spark.py` (options `--dir raw|sample`, `--seuil`, `--pause`), lancé avec
+  `spark-submit --master "local[*]" --driver-memory 2g` ; `spark.sql.shuffle.partitions = 8` dans le code.
+- Même logique que Hive : lecture avec schéma imposé, une ligne par film gardée en mémoire (`cache()`),
+  C, score pondéré, rang avec `row_number()` (score puis nombre de notes), écriture dans HDFS :
+  `/user/ubuntu/movielens/output/spark/raw/` (fichier `part-...csv` + `_SUCCESS`).
+- Échantillon (seuil 10) : résultat identique à Hive (même C = 3,540186..., même top 10), 36 s.
+- Jeu complet : **identique à Hive et à la référence pandas** (C = 3,54254040873888, mêmes films, même ordre,
+  mêmes scores). Copie : `results/top10_spark.tsv`.
+- Problème rencontré : un `SparkSubmit` resté bloqué après le test avec `--pause` (28 min, 1,9 Go de swap,
+  interface web décalée sur le port 4041) a faussé un premier chronométrage (83-95 s) -> processus arrêté
+  avec `kill`, mesures refaites, et on vérifie désormais avec `jps` avant et après.
+- Chronométrage valide (`scripts/06_chrono_spark.sh`, 3 exécutions) : 98,4 s, 75,5 s, 78,7 s
+  -> **médiane 78,7 s** (Hive : 175,4 s). Durées : `results/temps_spark.csv`.
+- Interface Spark (http://localhost:4040) : 8 tâches en parallèle (1 par cœur) ; des étapes « skipped »
+  car Spark réutilise les données déjà calculées (cache, résultats de regroupement).
