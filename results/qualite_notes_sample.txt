@@ -1,0 +1,15 @@
+nb_notes	userid_manquant	movieid_manquant	note_manquante	ts_manquant	note_invalide	note_min	note_max	premiere_note	derniere_note	nb_utilisateurs	nb_films_notes
+338648	0	0	0	0	0	0.5	5.0	1996-01-29 00:00:00	2023-07-20 06:20:18	127127	17971
+rating	nb
+0.5	5730
+1.0	10311
+1.5	5737
+2.0	21627
+2.5	17238
+3.0	64220
+3.5	44593
+4.0	88311
+4.5	31276
+5.0	49605
+paires_en_double	lignes_en_trop
+0	0

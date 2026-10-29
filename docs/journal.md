@@ -47,3 +47,32 @@
 - HDFS : `ratings.csv` -> 7 blocs de ~128 Mo, réplication 1, statut HEALTHY ;
   même nombre de lignes dans HDFS qu'en local (33 832 163).
 - Commandes regroupées dans `scripts/02_preparer_donnees.sh`.
+
+## Partie 3 : Qualité des données (Véracité)
+
+- Base `movielens` (jeu complet) et `movielens_sample` (échantillon), créées par le même script
+  `hive/01_creer_tables.hql` avec `--hivevar db=... --hivevar dir=...`.
+- Tables externes : `ratings_raw` (CSV simple, colonnes typées, en-tête sauté) et `movies_raw`
+  (OpenCSVSerde pour les titres entre guillemets, colonnes en texte).
+- Vues : `movies` (movieId converti en entier) et `ratings_dates` (timestamp -> date avec `from_unixtime`).
+- Problème rencontré : `WITH SERDEPROPERTIES (... 'quoteChar'='"')` -> `ParseException`, car le client Hive
+  prend le guillemet double seul pour le début d'un texte et découpe mal le script.
+  Solution : ligne supprimée, la virgule et le guillemet double sont déjà les réglages par défaut d'OpenCSVSerde.
+
+| Contrôle (jeu complet) | Résultat |
+|---|---|
+| Notes | 33 832 162 |
+| Valeurs manquantes ou illisibles (4 colonnes) | 0 |
+| Notes invalides (hors 0,5-5 ou non multiples de 0,5) | 0 |
+| Doublons (même utilisateur, même film) | 0 |
+| Notes sur un film absent de movies.csv | 0 |
+| Films / identifiants distincts / illisibles | 86 537 / 86 537 / 0 |
+| Utilisateurs | 330 975 |
+| Films ayant au moins une note | 83 239 (3 298 films sans aucune note) |
+| Période | du 1995-01-09 au 2023-07-20 (seulement 4 notes en 1995) |
+| Note la plus fréquente | 4,0 (8,8 millions) |
+
+- Décision : aucune correction nécessaire, le top 10 lira directement `ratings_raw` et `movies`.
+- Durées Hive (mode local) : contrôles 1-3 = 18 min 17 s (COUNT DISTINCT + doublons sur 33 M de paires),
+  contrôles 4-6 = 2 min 27 s.
+- Résultats bruts : `results/qualite_notes_*.txt` et `results/qualite_films_dates_*.txt`.
