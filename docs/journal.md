@@ -160,3 +160,9 @@
 - `figures/distribution_seuil.png` : distribution du nombre de notes par film (échelle log) avec le seuil de 1 000,
   4 464 films gardés (5,4 %) = 89,7 % des notes.
 - Déjà faites à la Partie 4 : `figures/distribution_nb_notes.png`, `figures/moyenne_vs_nb_notes.png`.
+
+## Partie 9 : README du dépôt
+
+- `README.md` réécrit : question, résultat (top 10), comparaison Hive / Spark, schéma du pipeline (Mermaid),
+  environnement, organisation du dépôt, commandes pour relancer, source et licence des données, auteurs.
+- Données non versionnées : trop lourdes pour GitHub et redistribution interdite par la licence MovieLens.
