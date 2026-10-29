@@ -1,0 +1,9 @@
+seuil,films_gardes,pct_films,pct_notes,film_n1,moyenne_n1,notes_n1
+1,83239,100.0,100.0,The Matrix Revolutions Revisited (2004),5.0,4
+10,32021,38.5,99.5,Money Heist: The Phenomenon (2020),4.65,10
+50,16116,19.4,98.5,Planet Earth II (2016),4.452,2041
+100,12253,14.7,97.7,Planet Earth II (2016),4.452,2041
+500,6312,7.6,93.6,Planet Earth II (2016),4.452,2041
+1000,4464,5.4,89.7,Planet Earth II (2016),4.452,2041
+5000,1559,1.9,70.3,"Shawshank Redemption, The (1994)",4.417,122296
+10000,840,1.0,55.2,"Shawshank Redemption, The (1994)",4.417,122296

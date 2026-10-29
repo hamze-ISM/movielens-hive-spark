@@ -76,3 +76,25 @@
 - Durées Hive (mode local) : contrôles 1-3 = 18 min 17 s (COUNT DISTINCT + doublons sur 33 M de paires),
   contrôles 4-6 = 2 min 27 s.
 - Résultats bruts : `results/qualite_notes_*.txt` et `results/qualite_films_dates_*.txt`.
+
+## Partie 4 : Choix du seuil et de la méthode de classement
+
+- Stats par film calculées par Hive (`hive/04_stats_par_film.hql`) : 83 239 films, 30 s sur le jeu complet.
+  Résultat analysé avec pandas dans `notebooks/04_choix_seuil.ipynb` (le petit résultat seulement).
+- Distribution très asymétrique (longue traîne) : médiane = 5 notes par film, 75 % des films <= 26 notes,
+  95 % <= 1 146, 17 916 films (21,5 %) n'ont qu'une seule note, maximum 122 296 (Shawshank Redemption).
+- Les moyennes extrêmes (0,5 ou 5) n'existent que pour les films peu notés : incertitude ~ sigma / racine(n).
+  Figures : `figures/distribution_nb_notes.png`, `figures/moyenne_vs_nb_notes.png`.
+- Effet du seuil (`results/effet_du_seuil.csv`) : seuil 1 -> n°1 avec 4 notes (moyenne 5,0),
+  seuil 10 -> films à 10-19 notes dans le top 10, seuil 1 000 -> haut du classement stable.
+
+**Choix final**
+- Seuil : au moins **1 000 notes** -> 4 464 films (5,4 %) qui représentent 89,7 % des notes,
+  incertitude ~ +/- 0,03 étoile.
+- Classement par **moyenne pondérée façon IMDb** : score = (n x moyenne + m x C) / (n + m),
+  avec m = 1 000 et C = moyenne de toutes les notes = 3,5425.
+- Départage : à score égal, le film le plus noté passe devant.
+- Limite : MovieLens mélange films, séries et documentaires (pas de colonne pour les distinguer).
+- Top 10 de référence (pandas) : `results/top10_reference_pandas.csv` -> 1. Shawshank Redemption (4,4097),
+  2. Godfather (4,3163), 3. Parasite (4,2712), 4. Usual Suspects, 5. Godfather Part II, 6. 12 Angry Men,
+  7. Schindler's List, 8. Fight Club, 9. Planet Earth (2006), 10. Seven Samurai (4,2117).
