@@ -124,4 +124,3 @@ Les fichiers de données ne sont pas inclus dans ce dépôt : ils sont trop volu
 
 Groupe ISM, L3 IA, 2026 :
 - Hamze Abdoulkarim Aden : pipeline, code, analyse, rapport
-- À COMPLÉTER : vidéo de présentation
