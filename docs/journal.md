@@ -26,3 +26,24 @@
   un dossier par fichier, car une table Hive pointe vers un dossier.
 - `.gitignore` : données et logs exclus, seuls les petits CSV de `results/` sont versionnés.
 - Dépôt public : https://github.com/hamze-ISM/movielens-hive-spark
+
+## Partie 2 : Données Windows -> WSL -> HDFS
+
+- Source : `C:\Users\User\Desktop\L3S5\Introduction au big data\TP Final\ml-latest`,
+  vue depuis Ubuntu sous `/mnt/c/Users/User/Desktop/...` (chemin entre guillemets à cause des espaces).
+- Fichiers utilisés : `ratings.csv` et `movies.csv` uniquement (+ `README.txt` pour la documentation).
+- Copie dans `data/raw/` : tailles identiques au octet près (933 898 879 et 4 192 335 octets).
+
+| Fichier | Lignes (en-tête compris) | Contenu | Taille |
+|---|---|---|---|
+| ratings.csv | 33 832 163 | 33 832 162 notes (userId, movieId, rating, timestamp) | 891 Mo |
+| movies.csv | 86 538 | 86 537 films (movieId, title, genres) | 4 Mo |
+
+- Encodage : ratings en ASCII, movies en UTF-8, fins de ligne Linux (pas de CRLF).
+- 7 540 titres contiennent une virgule et sont entre guillemets
+  (ex. `"American President, The (1995)"`) -> il faut un lecteur CSV qui gère les guillemets.
+- Échantillon de test : 1 % des notes tirées au hasard (awk, graine 42) -> 338 648 notes,
+  `data/sample/ratings_sample.csv` (8,9 Mo). Sert uniquement à tester le code.
+- HDFS : `ratings.csv` -> 7 blocs de ~128 Mo, réplication 1, statut HEALTHY ;
+  même nombre de lignes dans HDFS qu'en local (33 832 163).
+- Commandes regroupées dans `scripts/02_preparer_donnees.sh`.
