@@ -133,6 +133,7 @@
 - Interface Spark (http://localhost:4040) : 8 tâches en parallèle (1 par cœur) ; des étapes « skipped »
   car Spark réutilise les données déjà calculées (cache, résultats de regroupement).
   
+
 ## Partie 7 : Comparaison Hive / Spark
 
 - Script `scripts/07_comparaison.py` (sortie : `results/comparaison.txt`, `results/comparaison_*.csv`).
@@ -146,4 +147,16 @@
   démarrage (~13 s pour Spark) ; 3 mesures sur un seul PC -> on compare les médianes.
 - **Écriture** : Hive 36 lignes de code utile, Spark 50. Hive plus court et lisible (SQL), mais pièges du client
   (guillemet, commentaires) et table temporaire nécessaire. Spark : une partie des lignes en plus sert à la mise
-  en place (imports, paramètres, session, schéma) ; plus souple (variables Python,
+  en place (imports, paramètres, session, schéma) ; plus souple (variables Python, cache, vérifications
+  intermédiaires, lien direct avec pandas).
+
+  
+## Partie 8 : Visualisation
+
+- Notebook `notebooks/08_visualisation.ipynb` (lit seulement les petits fichiers de `results/`).
+- `figures/top10_films.png` : top 10, moyenne simple (orange) et score pondéré (bleu) reliés par un trait
+  -> effet de la pondération (ex. Planet Earth 4,448 -> 4,223 avec 3 015 notes, Shawshank presque inchangé).
+- `figures/comparaison_temps.png` : médiane des 3 exécutions (barres) et chaque exécution (points), Hive 175,4 s / Spark 78,7 s.
+- `figures/distribution_seuil.png` : distribution du nombre de notes par film (échelle log) avec le seuil de 1 000,
+  4 464 films gardés (5,4 %) = 89,7 % des notes.
+- Déjà faites à la Partie 4 : `figures/distribution_nb_notes.png`, `figures/moyenne_vs_nb_notes.png`.
