@@ -132,3 +132,18 @@
   -> **médiane 78,7 s** (Hive : 175,4 s). Durées : `results/temps_spark.csv`.
 - Interface Spark (http://localhost:4040) : 8 tâches en parallèle (1 par cœur) ; des étapes « skipped »
   car Spark réutilise les données déjà calculées (cache, résultats de regroupement).
+  
+## Partie 7 : Comparaison Hive / Spark
+
+- Script `scripts/07_comparaison.py` (sortie : `results/comparaison.txt`, `results/comparaison_*.csv`).
+- **Même résultat** : oui. Mêmes 10 films, même ordre, mêmes nombres de notes. Écart de score Hive / Spark = 0,
+  écart avec pandas <= 0,00005 (arrondi à 4 décimales seulement).
+- **Temps** (3 exécutions, jeu complet) : Hive médiane 175,4 s (174,6-213,2), Spark médiane 78,7 s (75,5-98,4)
+  -> **Spark 2,2 fois plus rapide**. Raisons : Hive enchaîne plusieurs jobs MapReduce avec écriture disque
+  entre chaque (coût fixe : 2 min 20 sur 1 % des données) ; Spark garde les données en mémoire (cache, étapes
+  « skipped ») et calcule sur 8 tâches en parallèle.
+- Limites : Hive en mode local (tâches de lecture une par une, sans YARN) est désavantagé ; temps incluant le
+  démarrage (~13 s pour Spark) ; 3 mesures sur un seul PC -> on compare les médianes.
+- **Écriture** : Hive 36 lignes de code utile, Spark 50. Hive plus court et lisible (SQL), mais pièges du client
+  (guillemet, commentaires) et table temporaire nécessaire. Spark : une partie des lignes en plus sert à la mise
+  en place (imports, paramètres, session, schéma) ; plus souple (variables Python,
